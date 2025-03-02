@@ -1,0 +1,41 @@
+services:
+  auth-server:
+    container_name: auth_service
+    build: 
+      context: ./auth
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
+    networks:
+      - internal_network
+
+  emotion-server:  # Changed to lowercase
+    container_name: emotion_detection_service
+    build: 
+      context: ./emotion-detection
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    networks:
+      - internal_network
+
+  nginx-proxy:
+    image: nginx:latest
+    container_name: nginx_proxy
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/nginx.conf
+      - ./logs:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - internal_network
+    depends_on:
+      - auth-server
+      - emotion-server  # Updated reference
+
+networks:
+  internal_network:
+    driver: bridge
