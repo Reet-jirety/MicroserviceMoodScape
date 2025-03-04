@@ -4,9 +4,9 @@ services:
     build: 
       context: ./auth
     expose:
-      - "5000"
+      - "8080"
     ports:
-      - "5000:5000"
+      - "8080:8080"
     networks:
       - internal_network
 
@@ -35,7 +35,7 @@ services:
     depends_on:
       - auth-server
       - emotion-server  # Updated reference
-
+      
 networks:
   internal_network:
     driver: bridge
