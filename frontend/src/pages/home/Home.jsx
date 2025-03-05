@@ -1,17 +1,21 @@
-import Sidebar from "../../components/sidebar/Sidebar"
-import Searchbar from "../../components/searchbar/Searchbar"
-import Main from "../../components/main/Main"
-import { RightSection } from "../../components/right/RightSection"
+import { useState } from 'react';
+import Sidebar from "../../components/sidebar/Sidebar";
+import Main from "../../components/main/Main";
+import { RightSection } from "../../components/right/RightSection";
+
 function Home() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="home_container w-full grid" style={{ gridTemplateColumns: "1fr 4fr 2fr", background: "linear-gradient(#050505, #18181d)" }}  >
-      <Sidebar/>
-      {/* <Searchbar/> */}
-      <Main/>
-      <RightSection/>
+    <div className="home_container w-full grid grid-cols-[1fr_4fr_2fr] bg-gradient-to-b from-[#050505] to-[#18181d] max-2xl:grid-cols-[3fr_2fr] max-xs:grid-cols-[1fr]">
+      <Sidebar 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+      <Main onMenuOpen={() => setIsSidebarOpen(true)} />
+      <RightSection />
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

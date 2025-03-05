@@ -2,7 +2,7 @@ import React from "react";
 
 export const Profile = () => {
   return (
-    <div className="profile flex items-center justify-end gap-[18px] mb-[40px]">
+    <div className="profile flex items-center justify-end gap-[18px] mb-[40px] max-xs:justify-center max-xs:mb-5">
       <i className="bx bxs-bell text-white"></i>
       <i className="bx bxs-cog text-white"></i>
       <div className="user flex">

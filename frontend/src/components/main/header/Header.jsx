@@ -2,13 +2,13 @@ import React from 'react'
 import { Navbar } from './navbar/Navbar'
 import { Search } from './search/Search'
 
-const Header = () => {
+const Header = ({ onMenuOpen }) => {
   return (
     <header className='flex items-center justify-between'>
-        <Navbar/>
-        <Search/>
+      <Navbar onOpen={onMenuOpen} />
+      <Search/>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;
