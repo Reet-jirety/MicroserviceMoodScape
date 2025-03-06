@@ -128,3 +128,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Ignore Python cache
+emotion-detection/__pycache__/
+
+# Ignore virtual environment
+emotion-detection/deepfaceVenv/
