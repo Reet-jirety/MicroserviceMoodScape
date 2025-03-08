@@ -1,15 +1,20 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18-alpine
+# Use the official Python image from Docker Hub
+FROM python:3.8-slim
 
-
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Install system dependencies required for OpenCV
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
-RUN npm install
+# Copy only the requirements file to optimize Docker build caching
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install -r requirements.txt
 
 # Copy the rest of the application code
 COPY . .
@@ -17,5 +22,5 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 8000
 
-# Define the command to run the app
-CMD ["node", "index.js"]
+# Command to run the Flask application
+CMD ["python", "app.py"]

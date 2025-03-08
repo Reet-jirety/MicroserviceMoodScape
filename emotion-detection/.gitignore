@@ -1,1 +1,19 @@
-node_modules
+# Python specific
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# IDE specific
+.vscode/
+.idea/
+
+# Ignore Docker files if needed (typically not necessary)
+# Docker specific
+# Dockerfile
+# .dockerignore
+
+# Add more files and directories to ignore as needed

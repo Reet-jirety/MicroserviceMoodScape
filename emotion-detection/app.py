@@ -48,5 +48,5 @@ def detect_emotion():
 
 if __name__ == '__main__':
     # For development, use Flask's server
-    # For production, use: gunicorn -w 4 -b 0.0.0.0:6000 EmotionDetector:app
-    app.run(host='0.0.0.0', port=6000, threaded=True)  # Threaded mode for better concurrency
+    # For production, use: gunicorn -w 4 -b 0.0.0.0:8000 EmotionDetector:app
+    app.run(host='0.0.0.0', port=8000, threaded=True)  # Threaded mode for better concurrency
