@@ -17,6 +17,8 @@ services:
       POSTGRES_DB: auth_database
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      CLERK_PUBLISHABLE_KEY: pk_test_bGlrZWQtbWFybGluLTg5LmNsZXJrLmFjY291bnRzLmRldiQ
+      CLERK_SECRET_KEY: sk_test_YiXy3Bjh287sAVyinC7pTV6VBPMndcLdjjuLJhXC6t
     depends_on:
       - postgres
 
@@ -60,9 +62,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - internal_network
-    # Uncomment the following if external access to PostgreSQL is needed
-    # ports:
-    #   - "5432:5432"
+    ports:
+      - "5432:5432"
 
 networks:
   internal_network:
