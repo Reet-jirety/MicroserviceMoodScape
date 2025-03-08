@@ -29,6 +29,11 @@ def detect_emotion():
     img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
     decode_time = time.time()
     print(f"Image decoding: {decode_time - start_time:.2f}s")
+
+    # Resize image to 640x480 for faster processing
+    img = cv2.resize(img, (640, 480), interpolation=cv2.INTER_AREA)
+    resize_time = time.time()
+    print(f"Image resizing: {resize_time - decode_time:.2f}s")
     
     try:
         # Analyze emotion with preloaded model and faster opencv backend
