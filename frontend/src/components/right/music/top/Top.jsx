@@ -17,7 +17,7 @@ export const Top = () => {
         <div className="description">
           <h3 className="text-[26px] font-medium mb-2 max-3xl:text-[22px]">Ripple Echoes</h3>
           <h5 className="text-[16px] mb-1">Kael Fischer</h5>
-          <p className="text-[#919191] text-[12px] font-bold">Best of 2024</p>
+          <p className="text-cool-gray-txt text-[12px] font-bold">Best of 2024</p>
         </div>
         <div className="progress flex items-center my-2.5 mx-0 max-3xl:m-0">
           <p className="text-[11px]">02:45</p>

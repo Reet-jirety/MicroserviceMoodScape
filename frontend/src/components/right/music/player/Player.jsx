@@ -2,7 +2,7 @@ import React from "react";
 
 export const Player = () => {
   return (
-    <div className="player-actions bg-[#5773ff] h-[26%] rounded-md flex flex-col items-center relative">
+    <div className="player-actions bg-blue-foreground h-[26%] rounded-md flex flex-col items-center relative">
       <div className="buttons flex items-center gap-7.5 mt-6 max-3xl:mt-[30px] max-2xl:mt-[38px]">
         <i className="bx bx-repeat text-white text-[20px] max-2xl:text-[18px] max-xs:text-[22px]"></i>
         <i className="bx bx-first-page text-white text-[20px] max-2xl:text-[18px] max-xs:text-[22px]"></i>
