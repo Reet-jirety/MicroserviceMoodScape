@@ -10,9 +10,9 @@ export const Navbar = ({onOpen}) => {
       >
         <i className="bx bx-menu text-white"></i>
       </button>
-      <a href="#" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Music</a>
-      <a href="#" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Live</a>
-      <a href="#" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Podcast</a>
+      <a href="/" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Music</a>
+      <a href="/emotion" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Emotion</a>
+      {/* <a href="#" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Podcast</a> */}
     </div>
   );
 };

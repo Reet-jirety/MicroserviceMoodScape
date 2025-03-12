@@ -11,13 +11,17 @@ const sequelize = new Sequelize(
     host: process.env.POSTGRES_HOST || 'localhost', // Docker container hostname
     port: process.env.POSTGRES_PORT || 5432, // Default PostgreSQL port
     dialect: 'postgres',
-    logging: false, // Disable logging; set to console.log for debugging
+    logging: true,
   }
 );
 
 sequelize
   .authenticate()
-  .then(() => console.log('Database connection established.'))
-  .catch((err) => console.error('Unable to connect to the database:', err));
+  .then(() => {
+    console.log('Database connection established.');
+    return sequelize.sync(); //  This ensures tables are created if they don't exist
+  })
+  .then(() => console.log('Tables are synchronized.'))
+  .catch((err) => console.error(' Unable to connect to the database:', err));
 
 module.exports = sequelize;

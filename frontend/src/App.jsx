@@ -2,18 +2,11 @@ import './App.css'
 import {Route, Routes } from "react-router-dom";
 import Home from './pages/home/Home'
 import AuthCallbackPage from './pages/auth-callback/AuthCallbackPage'
-import { axiosInstance } from './lib/axios';
 import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
+import Emotion from './pages/emotion/Emotion';
 
 function App() {
-  const getsomedata = async() => {
-    const res = await axiosInstance.get("/users", {
-      headers:{
-    "Authorization": `Bearer ${token}`
-     }
-  });
   
-}
   return (
     <>
       <Routes>
@@ -22,6 +15,7 @@ function App() {
           signUpForceRedirectUrl={"/auth-callback"}
         />}/>
         <Route path='/auth-callback' element = {<AuthCallbackPage/>}/>
+        <Route path='/emotion' element = {<Emotion/>}/>
       </Routes>
     </>
   )
