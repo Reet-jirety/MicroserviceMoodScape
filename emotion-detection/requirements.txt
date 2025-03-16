@@ -1,0 +1,13 @@
+flask==3.0.2
+flask-socketio==5.3.6
+tensorflow==2.13.0
+keras==2.13.1
+mtcnn==0.1.1
+deepface==0.0.79
+opencv-python==4.9.0.80
+numpy==1.24.3
+python-engineio==4.9.0
+python-socketio==5.11.1
+websocket-client==1.8.0
+gunicorn==21.2.0
+eventlet==0.35.2

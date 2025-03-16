@@ -1,0 +1,16 @@
+# Ignore local development files and directories
+venv/
+__pycache__/
+*.pyc
+
+# Ignore editor-specific files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.idea/
+
+# Ignore Docker specific files
+Dockerfile
+.dockerignore
+
+# Add more files and directories to ignore as needed

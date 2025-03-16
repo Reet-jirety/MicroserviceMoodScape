@@ -1,0 +1,73 @@
+services:
+  auth-server:
+    container_name: auth_service
+    build:
+      context: ./auth
+    volumes:
+      - ./auth:/app   # Mount your auth service code into the container (adjust /app as needed)
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - internal_network
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: auth_database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      CLERK_PUBLISHABLE_KEY: ${CLERK_PUBLISHABLE_KEY}
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+    depends_on:
+      - postgres
+
+  emotion-server:
+    container_name: emotion_detection_service
+    build:
+      context: ./emotion-detection
+    volumes:
+      - ./emotion-detection:/app   # Mount your emotion detection service code into the container (adjust /app as needed)
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    networks:
+      - internal_network
+
+  nginx-proxy:
+    image: nginx:1.21.6   # Use a specific, stable version
+    container_name: nginx_proxy
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/nginx.conf:ro   # Mount config as read-only
+      - ./logs:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - internal_network
+    depends_on:
+      - auth-server
+      - emotion-server
+
+  postgres:
+    image: postgres:14   # Use a specific version for stability
+    container_name: postgres_database
+    restart: always
+    environment:
+      POSTGRES_DB: auth_database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal_network
+    ports:
+      - "5432:5432"
+
+networks:
+  internal_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
