@@ -26,13 +26,13 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### **3. Download the ML Model from the given google drive link and place the file in this location **
+### **4. Download the ML Model from the given google drive link and place the file in this location**
 ```
 download link: https://drive.google.com/file/d/1Dzk-i37RHhuH2QhDkyvzvgYiv99XPhfQ/view?usp=sharing
 path: emotion-detection/ResNet50V2_Model_Checkpoint
 ```
 
-### **4. Run the Application**
+### **5. Run the Application**
 ```sh
 python run.py
 ```
