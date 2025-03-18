@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 ### **4. Run the Application**
 ```sh
-python app.py
+python run.py
 ```
 
 By default, the API will start on **http://localhost:8000**.
