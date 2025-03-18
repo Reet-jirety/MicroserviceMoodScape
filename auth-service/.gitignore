@@ -1,0 +1,36 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+auth-service
+
+# Dependency directories
+vendor/
+node_modules/
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Environment files
+.env
+.env.local
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Go workspace file
+go.work
+
+# Build output
+dist/
+bin/
+
+# Docker compose
+docker-compose.override.yml

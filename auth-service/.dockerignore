@@ -1,0 +1,14 @@
+.git
+.gitignore
+.dockignore
+*.md
+Dockerfile
+docker-compose.yml
+.env
+.vscode/
+.idea/
+go.mod
+go.sum
+main.go
+bin/
+test/
