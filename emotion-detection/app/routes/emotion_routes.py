@@ -20,6 +20,7 @@ def detect_emotion():
     
     file = request.files['image']
     result = detector.process_image_file(file)
+    print("Result:", result)
     
     if 'error' in result:
         return jsonify(result), 400

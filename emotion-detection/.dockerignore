@@ -11,6 +11,7 @@ __pycache__/
 
 # Ignore Docker specific files
 Dockerfile
-.dockerignore
+
 
 # Add more files and directories to ignore as needed
+testImages/

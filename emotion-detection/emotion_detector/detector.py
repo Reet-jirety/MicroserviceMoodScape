@@ -157,7 +157,7 @@ class EmotionDetector:
 if __name__ == "__main__":
     detector = EmotionDetector()
     # Test with a file
-    img_path="testImages/img4.jpg"
+    img_path="testImages/img3.jpg"
     with open(img_path, "rb") as file:
         result = detector.process_image_file(file)
         print(result)
