@@ -30,7 +30,7 @@ class SocketService:
                 if 'error' in result:
                     emit('emotion_result', {'error': result['error']})
                 else:
-                    emit('emotion_result', {'emotion': result['emotion']})
+                    emit('emotion_result', {'emotion': result['emotion'], 'recommendations': result['recommendations']})
             except Exception as e:
                 self.logger.error(f'Error in emotion detection: {str(e)}')
                 emit('emotion_result', {'error': str(e)}) 

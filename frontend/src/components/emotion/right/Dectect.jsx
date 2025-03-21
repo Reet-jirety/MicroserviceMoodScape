@@ -43,7 +43,7 @@ const emotionalThemes = {
   },
 };
 
-export const Detect = () => {
+export const Detect = (props) => {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [emotion, setEmotion] = useState(null);
   const [isDetecting, setIsDetecting] = useState(false);
@@ -103,8 +103,13 @@ export const Detect = () => {
     socketRef.current.on("emotion_result", (data) => {
       if (data.error) {
         setError("Error: " + data.error);
+        console.log(data.error);
       } else {
+        setError(null);
+        console.log(data);
         setEmotion(data.emotion);
+        // Add this line to pass recommendations to parent
+        props.setRecommendations(data.recommendations || []);
       }
     });
 
