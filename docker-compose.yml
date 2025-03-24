@@ -4,7 +4,7 @@ services:
     build:
       context: ./auth
     volumes:
-      - ./auth:/app   # Mount your auth service code into the container (adjust /app as needed)
+      - ./auth:/app
     expose:
       - "8080"
     ports:
@@ -27,20 +27,20 @@ services:
     build:
       context: ./emotion-detection
     volumes:
-      - ./emotion-detection:/app   # Mount your emotion detection service code into the container (adjust /app as needed)
+      - ./emotion-detection:/app
     expose:
       - "8000"
     ports:
       - "8000:8000"
     networks:
       - internal_network
-      
+
   user-server:
     container_name: user_service
     build:
       context: ./user
     volumes:
-      - ./user:/app   # Mount your playlist service code into the container
+      - ./user:/app
     expose:
       - "3002"
     ports:
@@ -61,7 +61,7 @@ services:
     build:
       context: ./song
     volumes:
-      - ./song:/app   # Mount your song service code into the container (adjust /app as needed)
+      - ./song:/app
     expose:
       - "8010"
     ports:
@@ -86,16 +86,15 @@ services:
       - song-server
 
   postgres:
-    image: postgres:14   # Use a specific version for stability
+    image: postgres:14
     container_name: postgres_database
     restart: always
     environment:
-      POSTGRES_MULTIPLE_DATABASES: auth_database,user_database
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init-multiple-databases.sh:/docker-entrypoint-initdb.d/init-multiple-databases.sh
+      - ./postgres/init-multiple-databases.sh:/docker-entrypoint-initdb.d/init-multiple-databases.sh:ro
     networks:
       - internal_network
     ports:
