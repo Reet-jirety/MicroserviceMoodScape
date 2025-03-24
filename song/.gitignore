@@ -6,8 +6,6 @@ main
 **/vendor/
 
 # Ignore Docker build files
-Dockerfile
-docker-compose.yml
 
 # Ignore IDE and editor files
 .vscode/
