@@ -56,6 +56,19 @@ services:
     depends_on:
       - postgres
 
+  song-server:
+    container_name: song_service
+    build:
+      context: ./song
+    volumes:
+      - ./song:/app   # Mount your song service code into the container (adjust /app as needed)
+    expose:
+      - "8010"
+    ports:
+      - "8010:8010"
+    networks:
+      - internal_network
+
   nginx-proxy:
     image: nginx:1.21.6   # Use a specific, stable version
     container_name: nginx_proxy
@@ -70,6 +83,7 @@ services:
     depends_on:
       - auth-server
       - emotion-server
+      - song-server
 
   postgres:
     image: postgres:14   # Use a specific version for stability
