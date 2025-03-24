@@ -1,0 +1,21 @@
+# Ignore Go build files
+main
+*.exe
+
+# Ignore Go module cache
+**/vendor/
+
+# Ignore Docker build files
+Dockerfile
+docker-compose.yml
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+
+# Ignore operating system files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
