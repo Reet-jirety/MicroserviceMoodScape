@@ -34,6 +34,27 @@ services:
       - "8000:8000"
     networks:
       - internal_network
+      
+  user-server:
+    container_name: user_service
+    build:
+      context: ./user
+    volumes:
+      - ./user:/app   # Mount your playlist service code into the container
+    expose:
+      - "3002"
+    ports:
+      - "3002:3002"
+    networks:
+      - internal_network
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: user_database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
 
   song-server:
     container_name: song_service
@@ -69,11 +90,12 @@ services:
     container_name: postgres_database
     restart: always
     environment:
-      POSTGRES_DB: auth_database
+      POSTGRES_MULTIPLE_DATABASES: auth_database,user_database
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-multiple-databases.sh:/docker-entrypoint-initdb.d/init-multiple-databases.sh
     networks:
       - internal_network
     ports:
