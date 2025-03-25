@@ -38,7 +38,7 @@ export const Search = () => {
     setShowResults(true);
     try {
       const response = await axiosInstance.get(
-        `http://localhost/search?query=${encodeURIComponent(searchQuery)}`
+        `http://localhost:8010/search?query=${encodeURIComponent(searchQuery)}`
       );
       console.log("API Response:", response.data);
       if (response.data && response.data.length > 0 && response.data[0].data) {
