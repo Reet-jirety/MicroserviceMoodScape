@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { io } from "socket.io-client";
-import { Profile } from "@/components/right/profile/Profile";
 import { motion } from "framer-motion";
 
-// Emotional theme configuration
 const emotionalThemes = {
   happy: {
     bg: "from-yellow-300 via-amber-400 to-orange-300",
@@ -48,19 +46,33 @@ export const Detect = (props) => {
   const [emotion, setEmotion] = useState(null);
   const [isDetecting, setIsDetecting] = useState(false);
   const [error, setError] = useState(null);
+  const [fps, setFps] = useState(0);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const socketRef = useRef(null);
   const detectionIntervalRef = useRef(null);
+  const frameCountRef = useRef(0);
+  const lastFpsUpdateRef = useRef(0);
+  const lastFrameTimeRef = useRef(0);
 
-  const currentTheme =
-    emotionalThemes[emotion?.toLowerCase()] || emotionalThemes.default;
+  const currentTheme = emotionalThemes[emotion?.toLowerCase()] || emotionalThemes.default;
 
-  // Animated floating particles
+  // FPS counter
+  const updateFps = () => {
+    const now = performance.now();
+    frameCountRef.current++;
+    
+    if (now - lastFpsUpdateRef.current >= 1000) {
+      setFps(Math.round(frameCountRef.current / ((now - lastFpsUpdateRef.current) / 1000)));
+      frameCountRef.current = 0;
+      lastFpsUpdateRef.current = now;
+    }
+  };
+
   const FloatingParticles = () => (
     <div className="absolute inset-0 overflow-hidden">
-      {[...Array(20)].map((_, i) => (
+      {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
           className={`absolute rounded-full ${currentTheme.particles}`}
@@ -82,33 +94,31 @@ export const Detect = (props) => {
             ease: "easeInOut",
           }}
           style={{
-            width: `${Math.random() * 20 + 10}px`,
-            height: `${Math.random() * 20 + 10}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            width: `${Math.random() * 15 + 5}px`,
+            height: `${Math.random() * 15 + 5}px`,
           }}
         />
       ))}
     </div>
   );
 
-  // Initialize socket connection
   const initSocket = () => {
-    socketRef.current = io("http://localhost:8000");
+    socketRef.current = io("http://localhost:8000", {
+      transports: ["websocket"],
+      upgrade: false,
+    });
 
     socketRef.current.on("connect", () => {
       console.log("Socket connected");
     });
 
     socketRef.current.on("emotion_result", (data) => {
+      updateFps();
       if (data.error) {
         setError("Error: " + data.error);
-        console.log(data.error);
       } else {
         setError(null);
-        console.log(data);
         setEmotion(data.emotion);
-        // Add this line to pass recommendations to parent
         props.setRecommendations(data.recommendations || []);
       }
     });
@@ -118,17 +128,22 @@ export const Detect = (props) => {
     });
   };
 
-  // Start video stream with proper async handling
   const startVideo = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
-        audio: false,
-      });
+      const constraints = {
+        video: { 
+          facingMode: "user",
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          frameRate: { ideal: 15 }
+        },
+        audio: false
+      };
 
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        // Wait for video metadata to load
         await new Promise((resolve) => {
           videoRef.current.onloadedmetadata = () => {
             videoRef.current.play();
@@ -144,48 +159,62 @@ export const Detect = (props) => {
     }
   };
 
-  // Capture frame with proper dimensions
   const captureFrame = () => {
     if (!videoRef.current || !canvasRef.current) return null;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-    // Set canvas dimensions to match video stream
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Use fixed dimensions for better performance
+    canvas.width = 320;
+    canvas.height = 240;
 
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    // Return full data URL without splitting
-    return canvas.toDataURL("image/jpeg");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL("image/jpeg", 0.7); // Lower quality for better FPS
   };
 
-  // Start detection with proper cleanup
   const startDetection = async () => {
     try {
       setError(null);
       setIsDetecting(true);
+      frameCountRef.current = 0;
+      lastFpsUpdateRef.current = performance.now();
+      
       await startVideo();
       initSocket();
 
+      let lastSentTime = 0;
+      const FRAME_SKIP = 2; // Process every 3rd frame
+
       detectionIntervalRef.current = setInterval(() => {
-        const imageData = captureFrame();
-        if (imageData && socketRef.current?.connected) {
-          socketRef.current.emit("detect_emotion_stream", imageData);
+        const now = Date.now();
+        
+        // Update FPS counter
+        updateFps();
+
+        // Skip frames if needed
+        if (frameCountRef.current % FRAME_SKIP !== 0) return;
+
+        // Send frame every 3 seconds max
+        if (now - lastSentTime > 3000 && socketRef.current?.connected) {
+          const imageData = captureFrame();
+          if (imageData) {
+            socketRef.current.emit("detect_emotion_stream", imageData);
+            lastSentTime = now;
+          }
         }
-      }, 3000);
+      }, 100); // Check every 100ms
     } catch (err) {
-      setIsDetecting(false);
-      setIsCameraActive(false);
-      console.log(err);
+      console.error("Detection error:", err);
+      stopDetection();
     }
   };
 
-  // Stop detection with proper cleanup
   const stopDetection = () => {
     setIsDetecting(false);
     setIsCameraActive(false);
+    setFps(0);
 
     if (detectionIntervalRef.current) {
       clearInterval(detectionIntervalRef.current);
@@ -198,27 +227,24 @@ export const Detect = (props) => {
     }
 
     if (videoRef.current?.srcObject) {
-      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+      videoRef.current.srcObject.getTracks().forEach(track => {
+        track.stop();
+        track.enabled = false;
+      });
       videoRef.current.srcObject = null;
     }
 
     setEmotion(null);
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopDetection();
     };
   }, []);
 
-  // Keep existing logic for video, socket, and detection...
-  // (Same as previous implementation, just keep those functions)
-
   return (
     <div className="right-section p-5 pr-9 pl-0 pb-5 pt-5 max-xs:py-5 max-xs:px-9">
-      <Profile />
-
       <motion.div
         className={`relative flex flex-col items-center mt-4 rounded-lg p-8 overflow-hidden bg-gradient-to-br ${currentTheme.bg} transition-all duration-500`}
         initial={{ scale: 0.95, opacity: 0 }}
@@ -234,9 +260,10 @@ export const Detect = (props) => {
           <div className="relative group aspect-video bg-black/30 rounded-2xl overflow-hidden backdrop-blur-sm border-2 border-white/10 mb-8">
             <video
               ref={videoRef}
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover"
               playsInline
               muted
+              style={{ transform: 'translateZ(0)' }} // Hardware acceleration
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
             <div className="absolute bottom-4 left-4 flex items-center">
@@ -246,7 +273,7 @@ export const Detect = (props) => {
                 }`}
               />
               <span className="text-white/80 text-sm">
-                {isCameraActive ? "Live Detection Active" : "Camera Offline"}
+                {isCameraActive ? `Live (${fps} FPS)` : "Camera Offline"}
               </span>
             </div>
           </div>
@@ -304,7 +331,6 @@ export const Detect = (props) => {
           )}
         </div>
 
-        {/* Animated background elements */}
         <div className="absolute inset-0 bg-noise opacity-10 mix-blend-overlay" />
         <canvas ref={canvasRef} style={{ display: "none" }} />
       </motion.div>
