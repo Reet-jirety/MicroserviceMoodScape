@@ -18,4 +18,4 @@ const syncModels = async () => {
   }
 };
 
-module.exports = { syncModels };
+module.exports = { syncModels, History, Playlist, Like, PlaylistTrack };

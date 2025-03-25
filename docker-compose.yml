@@ -42,9 +42,9 @@ services:
     volumes:
       - ./user:/app
     expose:
-      - "3002"
+      - "8050"
     ports:
-      - "3002:3002"
+      - "8050:8050"
     networks:
       - internal_network
     environment:

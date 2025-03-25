@@ -3,6 +3,8 @@ const { sequelize } = require('../config/database');
 
 // Add a track to user's history
 exports.addToHistory = async (req, res) => {
+  console.log(req.userId);
+  
   const { trackId, trackName, artistName, albumName, albumCover, playDuration } = req.body;
   const userId = req.userId; // Assuming middleware sets this
 

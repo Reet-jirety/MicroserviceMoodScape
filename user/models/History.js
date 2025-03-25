@@ -9,7 +9,7 @@ const History = sequelize.define('History', {
     primaryKey: true,
   },
   userId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     comment: 'References the user ID from auth service',
   },
