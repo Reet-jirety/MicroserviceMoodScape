@@ -6,6 +6,7 @@ import { AuthenticateWithRedirectCallback } from '@clerk/clerk-react';
 import Emotion from './pages/emotion/Emotion';
 import SpotifyPlayer from './pages/player/SpotifyPlayer';
 import Player from './pages/player/Player';
+// import ArtistPage from './pages/artist/artist';
 
 function App() {
   
@@ -19,6 +20,8 @@ function App() {
         <Route path='/auth-callback' element = {<AuthCallbackPage/>}/>
         <Route path='/emotion' element = {<Emotion/>}/>
         <Route path='/player' element = {<Player/>}/>
+        {/* <Route path='/artists' element = {<ArtistPage/>}/> */}
+
       </Routes>
     </>
   )

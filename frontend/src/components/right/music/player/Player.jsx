@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
+import { PlayerContext } from "../context/PlayerContext";
 
 export const Player = () => {
+  const { isPlaying, togglePlayPause } = useContext(PlayerContext);
+
   return (
     <div className="player-actions bg-blue-foreground h-[26%] rounded-md flex flex-col items-center relative">
       <div className="buttons flex items-center gap-7.5 mt-6 max-3xl:mt-[30px] max-2xl:mt-[38px]">
         <i className="bx bx-repeat text-white text-[20px] max-2xl:text-[18px] max-xs:text-[22px]"></i>
         <i className="bx bx-first-page text-white text-[20px] max-2xl:text-[18px] max-xs:text-[22px]"></i>
-        <i className="bx bxs-right-arrow play-button text-[20px] p-4 bg-white text-[#5775ff] rounded-[18px] max-3xl:p-[10px] max-3xl:rounded-[16px] max-2xl:text-[18px] max-xs:text-[22px]"></i>
+        <i
+          className={`bx ${isPlaying ? "bx-pause" : "bx-play"} play-button text-[20px] p-4 bg-white text-[#5775ff] rounded-[18px] max-3xl:p-[10px] max-3xl:rounded-[16px] max-2xl:text-[18px] max-xs:text-[22px] cursor-pointer`}
+          onClick={togglePlayPause}
+        ></i>
         <i className="bx bx-last-page text-white text-[20px] max-2xl:text-[18px] max-xs:text-[22px]"></i>
         <i className="bx bx-transfer-alt text-white text-[20px] max-2xl:text-[18px] max-xs:text-[22px]"></i>
       </div>

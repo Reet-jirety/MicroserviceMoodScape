@@ -42,7 +42,7 @@ export const Search = () => {
       );
       console.log("API Response:", response.data);
       if (response.data && response.data.length > 0 && response.data[0].data) {
-        setSearchResults(response.data[0].data); // Changed to response.data[0].data
+        setSearchResults(response.data[0].data);
         console.log("Updated searchResults:", response.data[0].data);
       } else {
         setSearchResults({});

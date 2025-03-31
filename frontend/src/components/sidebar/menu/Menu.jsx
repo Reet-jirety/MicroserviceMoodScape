@@ -4,27 +4,57 @@ function Menu() {
     { icon: "bxs-volume-full", label: "Genres" },
     { icon: "bxs-album", label: "Albums" },
     { icon: "bxs-microphone", label: "Artists" },
-    { icon: "bxs-radio", label: "Podcasts" },
+   
   ];
+
+  const [explore, genres, albums, artists] = menuItems;
 
   return (
     <div className="menu">
       <h5 className="text-[#919191] mb-[12px] uppercase">Menu</h5>
       <ul className="list-none text-white">
-        {menuItems.map((item, index) => (
-          <li
-            key={index}
-            className="mb-[8px] flex items-center gap-[20px] cursor-pointer hover:text-blue-foreground"
+      <li className="mb-[8px] flex items-center gap-[20px] cursor-pointer hover:text-blue-foreground">
+          <i className={`bx ${explore.icon}`}></i>
+          <a
+            href="/explore"
+            className="text-[14px] font-bold transition-all duration-300 ease-in-out"
           >
-            <i className={`bx ${item.icon}`}></i>
-            <a
-              href="#"
-              className="text-[14px] font-bold transition-all duration-300 ease-in-out"
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
+            {explore.label}
+          </a>
+        </li>
+
+        {/* Genres Link */}
+        <li className="mb-[8px] flex items-center gap-[20px] cursor-pointer hover:text-blue-foreground">
+          <i className={`bx ${genres.icon}`}></i>
+          <a
+            href="/genres"
+            className="text-[14px] font-bold transition-all duration-300 ease-in-out"
+          >
+            {genres.label}
+          </a>
+        </li>
+
+        {/* Albums Link */}
+        <li className="mb-[8px] flex items-center gap-[20px] cursor-pointer hover:text-blue-foreground">
+          <i className={`bx ${albums.icon}`}></i>
+          <a
+            href="/albums"
+            className="text-[14px] font-bold transition-all duration-300 ease-in-out"
+          >
+            {albums.label}
+          </a>
+        </li>
+
+        {/* Artists Link */}
+        <li className="mb-[8px] flex items-center gap-[20px] cursor-pointer hover:text-blue-foreground">
+          <i className={`bx ${artists.icon}`}></i>
+          <a
+            href="/artists"
+            className="text-[14px] font-bold transition-all duration-300 ease-in-out"
+          >
+            {artists.label}
+          </a>
+        </li>
       </ul>
     </div>
   );

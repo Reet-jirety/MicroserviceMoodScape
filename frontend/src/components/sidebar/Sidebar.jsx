@@ -13,8 +13,7 @@ function Sidebar({ isOpen, onClose }) {
     >
       <Logo onClose={onClose} />
       <Menu />
-      <Menu />
-      <Menu />
+      
       <Device />
     </aside>
   );
