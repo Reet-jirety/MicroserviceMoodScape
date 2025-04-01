@@ -103,7 +103,7 @@ export const Detect = (props) => {
   );
 
   const initSocket = () => {
-    socketRef.current = io("http://localhost:8000", {
+    socketRef.current = io("http://localhost:8020", {
       transports: ["websocket"],
       upgrade: false,
     });
@@ -113,6 +113,8 @@ export const Detect = (props) => {
     });
 
     socketRef.current.on("emotion_result", (data) => {
+      console.log(data);
+      
       updateFps();
       if (data.error) {
         setError("Error: " + data.error);
@@ -204,7 +206,7 @@ export const Detect = (props) => {
             lastSentTime = now;
           }
         }
-      }, 100); // Check every 100ms
+      }, 1000); // Check every 100ms
     } catch (err) {
       console.error("Detection error:", err);
       stopDetection();

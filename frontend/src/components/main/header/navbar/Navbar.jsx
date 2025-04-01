@@ -12,7 +12,7 @@ export const Navbar = ({onOpen}) => {
       </button>
       <a href="/" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Music</a>
       <a href="/emotion" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Emotion</a>
-      {/* <a href="#" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Podcast</a> */}
+      <a href="/pro" className="uppercase text-primary transition-all duration-300 ease-in-out max-2xl:text-[13px]">Pro</a>
     </div>
   );
 };

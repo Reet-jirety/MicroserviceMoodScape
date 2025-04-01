@@ -1,4 +1,68 @@
+version: '3.8'
+
 services:
+  # ========================
+  # Database Services
+  # ========================
+  postgres:
+    image: postgres:14
+    container_name: postgres_database
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-multiple-databases.sh:/docker-entrypoint-initdb.d/init-multiple-databases.sh:ro
+    networks:
+      - internal_network
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - internal_network
+
+  # ========================
+  # Kafka & Zookeeper
+  # ========================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - internal_network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    networks:
+      - internal_network
+
+  # ========================
+  # Backend Services
+  # ========================
   auth-server:
     container_name: auth_service
     build:
@@ -21,19 +85,6 @@ services:
       CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
     depends_on:
       - postgres
-
-  emotion-server:
-    container_name: emotion_detection_service
-    build:
-      context: ./emotion-detection
-    volumes:
-      - ./emotion-detection:/app
-    expose:
-      - "8000"
-    ports:
-      - "8000:8000"
-    networks:
-      - internal_network
 
   user-server:
     container_name: user_service
@@ -69,11 +120,55 @@ services:
     networks:
       - internal_network
 
+  emotion-server:
+    container_name: emotion_detection_service
+    build:
+      context: ./emotion-detection
+    volumes:
+      - ./emotion-detection:/app
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    networks:
+      - internal_network
+
+  socket-server:
+    container_name: socket_service
+    build:
+      context: ./socket
+    volumes:
+      - ./socket:/app
+    expose:
+      - "8020"
+    ports:
+      - "8020:8020"
+    networks:
+      - internal_network
+    depends_on:
+      - kafka
+      - redis
+
+  emotion-consumer:
+    container_name: emotion_consumer
+    build:
+      context: ./emotion
+    volumes:
+      - ./emotion:/app
+    networks:
+      - internal_network
+    depends_on:
+      - kafka
+      - redis
+
+  # ========================
+  # Reverse Proxy
+  # ========================
   nginx-proxy:
-    image: nginx:1.21.6   # Use a specific, stable version
+    image: nginx:1.21.6
     container_name: nginx_proxy
     volumes:
-      - ./nginx/proxy.conf:/etc/nginx/nginx.conf:ro   # Mount config as read-only
+      - ./nginx/proxy.conf:/etc/nginx/nginx.conf:ro
       - ./logs:/var/log/nginx
     ports:
       - "80:80"
@@ -85,21 +180,9 @@ services:
       - emotion-server
       - song-server
 
-  postgres:
-    image: postgres:14
-    container_name: postgres_database
-    restart: always
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init-multiple-databases.sh:/docker-entrypoint-initdb.d/init-multiple-databases.sh:ro
-    networks:
-      - internal_network
-    ports:
-      - "5432:5432"
-
+# ========================
+# Networks & Volumes
+# ========================
 networks:
   internal_network:
     driver: bridge
