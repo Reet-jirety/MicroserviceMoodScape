@@ -6,6 +6,7 @@ const { syncModels } = require('./models');
 const playlistRoutes = require('./routes/playlist.routes');
 const likeRoutes = require('./routes/like.routes');
 const historyRoutes = require('./routes/history.routes');
+const startConsumer = require('./kafka/consumer');
 
 require('dotenv').config();
 
@@ -52,6 +53,8 @@ async function startServer() {
   try {
     await connectToDatabase();
     await syncModels(); // Ensure models are created or updated
+    startConsumer();
+
     app.listen(PORT, () => {
       console.log(`Playlist service running on port ${PORT}`);
     });
