@@ -48,6 +48,8 @@ async function runKafka() {
   consumer.run({
     eachMessage: async ({ message }) => {
       const result = JSON.parse(message.value.toString());
+      console.log(`Received message from Kafka: ${result}`);
+      
       const { socketId, emotion } = result;
       const redisKey = `emotion:${socketId}`;
       console.log(`Received emotion result for socket ${socketId}:`, emotion);
@@ -101,6 +103,9 @@ io.on('connection', (socket) => {
       socketId: socket.id,
       faceData: data
     };
+
+    console.log(`Sending face data to Kafka for socket ${socket.id}:`, payload);
+    
 
     await producer.send({
       topic: 'faceData',

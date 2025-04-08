@@ -123,15 +123,13 @@ services:
   emotion-server:
     container_name: emotion_detection_service
     build:
-      context: ./emotion-detection
+      context: ./emotion-consumer
     volumes:
-      - ./emotion-detection:/app
-    expose:
-      - "8000"
-    ports:
-      - "8000:8000"
+      - ./emotion-consumer:/app
     networks:
       - internal_network
+    depends_on:
+      - kafka
 
   socket-server:
     container_name: socket_service
@@ -149,17 +147,17 @@ services:
       - kafka
       - redis
 
-  emotion-consumer:
-    container_name: emotion_consumer
-    build:
-      context: ./emotion
-    volumes:
-      - ./emotion:/app
-    networks:
-      - internal_network
-    depends_on:
-      - kafka
-      - redis
+  # emotion-consumer:
+  #   container_name: emotion_consumer
+  #   build:
+  #     context: ./emotion
+  #   volumes:
+  #     - ./emotion:/app
+  #   networks:
+  #     - internal_network
+  #   depends_on:
+  #     - kafka
+  #     - redis
 
   # ========================
   # Reverse Proxy

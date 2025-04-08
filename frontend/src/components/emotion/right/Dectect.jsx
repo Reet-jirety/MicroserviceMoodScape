@@ -206,7 +206,7 @@ export const Detect = (props) => {
             lastSentTime = now;
           }
         }
-      }, 1000); // Check every 100ms
+      }, 300); // Check every 100ms
     } catch (err) {
       console.error("Detection error:", err);
       stopDetection();
