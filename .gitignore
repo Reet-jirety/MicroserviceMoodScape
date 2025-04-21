@@ -281,3 +281,5 @@ resnet50v2_best.keras
 
 # Ignore the test images
 emotion-detection/testImages
+
+emotion-consumer/model/resnet50v2_best.keras
