@@ -4,6 +4,9 @@ const socketIo = require('socket.io');
 const { Kafka } = require('kafkajs');
 const { createClient } = require('redis');
 const { createAdapter } = require('@socket.io/redis-adapter');
+const fs = require('fs');
+const path = require('path');
+const csvParser = require('csv-parser');
 
 const app = express();
 const server = http.createServer(app);
@@ -40,6 +43,41 @@ const kafka = new Kafka({
 const producer = kafka.producer();
 const consumer = kafka.consumer({ groupId: 'server-group' });
 
+// Load the song data from the CSV file
+const songData = [];
+fs.createReadStream(path.join(__dirname, './data/data_moods.csv'))
+  .pipe(csvParser())
+  .on('data', (row) => {
+    songData.push(row);
+  })
+  .on('end', () => {
+    console.log('Song data loaded successfully.');
+  });
+
+// Function to recommend songs based on emotion
+function recommendSongs(emotion) {
+  // Map emotions to moods
+  let mood;
+  if (emotion === 'Angry') mood = 'Energetic';
+  else if (emotion === 'Disgust') mood = 'Calm';
+  else if (emotion === 'Fear') mood = 'Energetic';
+  else if (emotion === 'Happy') mood = 'Happy';
+  else if (emotion === 'Neutral') mood = 'Calm';
+  else if (emotion === 'Sad') mood = 'Sad';
+  else if (emotion === 'Surprise') mood = 'Energetic';
+  else mood = 'Calm';
+
+  // Filter songs by mood
+  const filteredSongs = songData.filter((song) => song.mood === mood);
+
+  // Select up to 5 random songs
+  const recommendations = filteredSongs.length > 5
+    ? filteredSongs.sort(() => 0.5 - Math.random()).slice(0, 5)
+    : filteredSongs;
+
+  return recommendations;
+}
+
 async function runKafka() {
   await producer.connect();
   await consumer.connect();
@@ -54,7 +92,6 @@ async function runKafka() {
       const redisKey = `emotion:${socketId}`;
       console.log(`Received emotion result for socket ${socketId}:`, emotion);
       
-
       // Increment the count for this emotion.
       await redisClient.hIncrBy(redisKey, emotion, 1);
       // Increment a total counter.
@@ -80,12 +117,19 @@ async function runKafka() {
 
         console.log(`Final emotion for ${socketId}: ${majorityEmotion}`);
 
-        // Emit final aggregated emotion to the client.
-        io.to(socketId).emit('emotion_result', majorityEmotion);
-        // Instruct the client to stop sending data.
+        // Recommend songs based on the majority emotion
+        const recommendedSongs = recommendSongs(majorityEmotion);
+
+        // Emit final aggregated emotion and recommended songs to the client
+        io.to(socketId).emit('emotion_result', {
+          emotion: majorityEmotion,
+          recommendations: recommendedSongs,
+        });
+
+        // Instruct the client to stop sending data
         io.to(socketId).emit('stopSendingData');
 
-        // Clear stored state.
+        // Clear stored state
         await redisClient.del(redisKey);
       }
     }
