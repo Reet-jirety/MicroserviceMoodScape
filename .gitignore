@@ -277,7 +277,7 @@ emotion-detection/__pycache__/
 emotion-detection/venv/
 
 # Ignore the model checkpoint
-emotion-detection/ResNet50V2_Model_Checkpoint/resnet50v2_best.keras
+resnet50v2_best.keras
 
 # Ignore the test images
 emotion-detection/testImages
