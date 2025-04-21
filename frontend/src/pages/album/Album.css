@@ -1,0 +1,104 @@
+.album-page {
+  padding: 2rem;
+  color: #fff; /* Assuming a dark theme */
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.album-loading,
+.album-error,
+.album-not-found {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+}
+
+.album-header {
+  display: flex;
+  align-items: flex-end; /* Align items to the bottom */
+  gap: 2rem;
+  margin-bottom: 3rem;
+  background-color: rgba(255, 255, 255, 0.05); /* Slight background for header */
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.album-cover-art {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.album-info {
+  flex-grow: 1;
+}
+
+.album-info h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+}
+
+.album-info h2 {
+  font-size: 1.5rem;
+  font-weight: normal;
+  color: #b3b3b3; /* Lighter text for artist */
+  margin: 0 0 1rem 0;
+}
+
+.album-info p {
+  font-size: 0.9rem;
+  color: #a7a7a7;
+  margin: 0.3rem 0;
+}
+
+.album-tracklist {
+  margin-top: 2rem;
+}
+
+.album-tracklist h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+}
+
+.album-tracklist ol {
+  list-style: none;
+  padding: 0;
+}
+
+.track-item {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1px solid #282828; /* Subtle separator */
+  transition: background-color 0.2s ease;
+}
+
+.track-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.track-number {
+  width: 30px;
+  color: #b3b3b3;
+  text-align: right;
+  margin-right: 1rem;
+}
+
+.track-title {
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.track-duration {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+  margin-left: 1rem;
+}
+
+/* Add styles for potential play buttons, etc. */
