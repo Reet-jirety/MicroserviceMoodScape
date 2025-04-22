@@ -7,9 +7,9 @@ function Device() {
       <div className="bg-dark-bluish-gray rounded-t-[6px] p-[10px] flex items-center gap-[10px] text-white text-[13px]">
         <img src={Current_png} className="w-[36px] h-[36px]" />
         <h4>
-          Apple
+          Connect
           <br />
-          Homepod
+          Device
         </h4>
       </div>
 

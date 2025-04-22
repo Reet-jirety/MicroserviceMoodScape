@@ -1,5 +1,8 @@
 import React from "react";
-
+import Diet_Mountain_Diew from "../../../../assets/Diet_Mountain_Diew.jpeg";
+import Die_With_A_Smile from "../../../../assets/Die_With_A_Smile.jpeg";
+import Snowman from "../../../../assets/Snowman.jpeg";
+import Lover from "../../../../assets/Lover.jpeg";
 export const Musiclist = () => {
   return (
     <div className="music-list bg-deep-charcoal p-5 text-white rounded-md w-[65%] max-3xl:w-full">
@@ -10,10 +13,10 @@ export const Musiclist = () => {
 
       <div className="items space-y-5">
         {[
-          { id: "01", title: "Diet Mountain Diew", artist: "Lana Del Ray", duration: "03:45", img: "assets/song-1.png" },
-          { id: "02", title: "Die With A Smile", artist: "Lady Gaga, Bruno Mars", duration: "04:35", img: "assets/song-2.png" },
-          { id: "03", title: "Snowman", artist: "Sia", duration: "04:22", img: "assets/song-3.png" },
-          { id: "04", title: "Lover", artist: "Taylor Swift", duration: "03:17", img: "assets/song-4.png" }
+          { id: "01", title: "Diet Mountain Diew", artist: "Lana Del Ray", duration: "03:45", img: "Diet_Mountain_Diew.jpeg" },
+          { id: "02", title: "Die With A Smile", artist: "Lady Gaga, Bruno Mars", duration: "04:35", img: "Die_With_A_Smile.jpeg" },
+          { id: "03", title: "Snowman", artist: "Sia", duration: "04:22", img: "Snowman.jpeg" },
+          { id: "04", title: "Lover", artist: "Taylor Swift", duration: "03:17", img: "Lover.jpeg" }
         ].map((song, index) => (
           <div 
             key={song.id} 

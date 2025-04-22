@@ -45,7 +45,7 @@ export const Top = () => {
             {currentSong ? (currentSong.primaryArtists || currentSong.singers || currentSong.artist) : "Kael Fischer"}
           </h5>
           <p className="text-cool-gray-txt text-[12px] font-bold">
-            {currentSong ? "Now Playing" : "Best of 2024"}
+            {currentSong ? "Now Playing" : "Best of 2025"}
           </p>
         </div>
         <div className="progress flex items-center my-2.5 mx-0 max-3xl:m-0 w-full">
