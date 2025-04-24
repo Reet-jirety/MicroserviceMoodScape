@@ -90,7 +90,7 @@ Ensure you have the following installed:
 ### Steps to Run the Project
 1. **Clone the Repository**
    ```sh
-   git clone https://github.com/Pallav46/MicroserviceMoodScape.git
+   git clone https://github.com/Reet-jirety/MicroserviceMoodScape.git
    cd Microservice_MoodScape
    ```
 2. **Start Services using Docker**
